@@ -1,16 +1,19 @@
-// db/models/index.js
+const HorseModel = require("./models/horse-model");
 const Sequelize = require("sequelize");
-const config = require("../config.js")[process.env.NODE_ENV || "development"];
+const config = require("./config");
 
 const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config
+  {
+    ...config,
+    logging: false,
+  }
 );
 
 const models = {
-  Horse: sequelize.import("./models/horse-model.js"),
+  Horse: HorseModel(sequelize, Sequelize.DataTypes),
 };
 
 Object.keys(models).forEach((modelName) => {

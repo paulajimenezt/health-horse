@@ -1,13 +1,13 @@
-const Horse = require("../models/horse");
+const { Horse } = require("../db/");
 
 class HorsesService {
   // Save a horse
   async save(horseData) {
-    const horse = new Horse(horseData);
     try {
-      const savedHorse = await horse.save();
+      const savedHorse = await Horse.create(horseData);
       return savedHorse;
     } catch (error) {
+      console.error("Failed to create horse:", error);
       throw new Error("Failed to save horse");
     }
   }
@@ -15,9 +15,10 @@ class HorsesService {
   // Get a horse by ID
   async get(horseId) {
     try {
-      const horse = await Horse.findById(horseId);
+      const horse = await Horse.findByPk(horseId);
       return horse;
     } catch (error) {
+      console.error("Failed to get horse:", error);
       throw new Error("Failed to get horse");
     }
   }
@@ -25,9 +26,10 @@ class HorsesService {
   // Get all horses
   async getAll() {
     try {
-      const horses = await Horse.find();
+      const horses = await Horse.findAll();
       return horses;
     } catch (error) {
+      console.error("Failed to get horses:", error);
       throw new Error("Failed to get horses");
     }
   }
@@ -35,21 +37,29 @@ class HorsesService {
   // Update a horse by ID
   async update(horseId, horseData) {
     try {
-      const updatedHorse = await Horse.findByIdAndUpdate(horseId, horseData, {
-        new: true,
-      });
-      return updatedHorse;
+      const horse = await Horse.findByPk(horseId);
+      if (horse) {
+        await horse.update(horseData);
+        return horse;
+      }
     } catch (error) {
+      console.error("Failed to update horse:", error);
       throw new Error("Failed to update horse");
     }
   }
 
   // Delete a horse by ID
-  async delete(horseId) {
+  async delete(horseId, horseData) {
     try {
-      const deletedHorse = await Horse.findByIdAndDelete(horseId);
-      return deletedHorse;
+      const horse = await Horse.findByPk(horseId);
+      if (horse) {
+        await horse.destroy(horseData);
+        return horse;
+      } else {
+        throw new Error("Horse not found");
+      }
     } catch (error) {
+      console.error("Failed to delete horse:", error);
       throw new Error("Failed to delete horse");
     }
   }

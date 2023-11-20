@@ -3,18 +3,18 @@ const router = express.Router();
 const horsesController = require("../controllers/horses-controller");
 
 // GET /horses
-router.get("/horses", horsesController.getAllHorses);
+router.get("/", horsesController.getAllHorses);
 
 // GET /horses/:id
-router.get("/horses/:id", horsesController.getHorseById);
+router.get("/:id", horsesController.getHorseById);
 
 // POST /horses
-router.post("/horses", horsesController.createHorse);
+router.post("/", horsesController.createHorse);
 
 // PATCH /horses/:id
-router.patch("/horses/:id", horsesController.updateHorse);
+router.patch("/:id", horsesController.updateHorse);
 
 // DELETE /horses/:id
-router.delete("/horses/:id", horsesController.deleteHorse);
+router.delete("/:id", horsesController.deleteHorse);
 
 module.exports = router;
